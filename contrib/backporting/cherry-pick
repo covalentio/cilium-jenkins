@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <commit-id>"
+  exit 1
+fi
+CID=$1
+REM=`git remote -v | grep "github.com.cilium/cilium" | head -n1 | cut -f1`
+BRANCHES=`git branch -q -r --contains $CID $REM/master 2> /dev/null`
+if ! echo ${BRANCHES} | grep -q ".*$REM/master.*"; then
+  echo "Commit $CID not in $REM/master!"
+  exit 1
+fi
+TMPF1=`mktemp cp.XXXXXX`
+TMPF2=`mktemp cp.XXXXXX`
+FROM=`git show --pretty=email $CID | head -n 2 | grep "From: "`
+FULL_ID=`git show $CID | head -n 1 | cut -f 2 -d ' '`
+git show --patch-with-stat --pretty=email $FULL_ID > $TMPF1
+HDR_DONE=false
+OLD_IFS="$IFS"
+IFS=
+while read line
+do
+  echo "$line" >> $TMPF2
+  if echo "$line" | grep -q "^$"; then
+    if [ $HDR_DONE = "false" ]; then
+      echo "$FROM" >> $TMPF2
+      echo "" >> $TMPF2
+      echo "[ upstream commit $FULL_ID ]" >> $TMPF2
+      echo "" >> $TMPF2
+      HDR_DONE=true
+    fi
+  fi
+done < $TMPF1
+IFS="$OLD_IFS"
+rm $TMPF1
+git am -3 --signoff $TMPF2
+rm $TMPF2
