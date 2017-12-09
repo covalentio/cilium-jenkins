@@ -596,6 +596,9 @@ cd "${dir}/../.."
 
 if [ -n "${RELOAD}" ]; then
     vagrant reload
+elif [ -n "${NO_PROVISION}" ]; then
+    vagrant up --no-provision
 else
     vagrant up
 fi
+
