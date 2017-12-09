@@ -14,7 +14,6 @@ function check_no_sleep {
      grep -v "cilium-files" | \
      grep -v ".diff" | \
      grep -v ".yaml" | \
-     grep -v "start_vms.sh" | \
      grep -v ".json"; then
     
     echo "Please do not use sleep, consider using one of the wait helper functions."
@@ -34,6 +33,7 @@ function check_flags_set
     grep -v "cilium-files" | \
     grep -v ".diff" | \
     grep -v ".yaml" | \
+    grep -v "start_vms.sh" | \ 
     grep -v ".json" ; then
     echo "Please make sure that all tests contain 'set -ex'"
     exit 1
