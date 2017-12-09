@@ -14,6 +14,7 @@ function check_no_sleep {
      grep -v "cilium-files" | \
      grep -v ".diff" | \
      grep -v ".yaml" | \
+     grep -v "start_vms.sh" | \
      grep -v ".json"; then
     
     echo "Please do not use sleep, consider using one of the wait helper functions."
