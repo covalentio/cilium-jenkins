@@ -598,6 +598,8 @@ if [ -n "${RELOAD}" ]; then
     vagrant reload
 elif [ -n "${NO_PROVISION}" ]; then
     vagrant up --no-provision
+elif [ -n "${PROVISION}" ]; then
+    vagrant provision
 else
     vagrant up
 fi

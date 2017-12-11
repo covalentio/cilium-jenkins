@@ -23,12 +23,12 @@ pipeline {
                     "Runtime Tests": {
                          // Make sure that VMs from prior runs are cleaned up in case something went wrong in a prior build.
                          // sh 'vagrant destroy -f || true'
-                         sh 'vagrant provision'
+                         sh 'PROVISION=1 ./contrib/vagrant/start.sh'
                      },
                     "Runtime Tests with Envoy": {
                          // Make sure that VMs from prior runs are cleaned up in case something went wrong in a prior build.
                          // sh 'CILIUM_USE_ENVOY=1 vagrant destroy -f || true'
-                         sh 'CILIUM_USE_ENVOY=1 vagrant provision'
+                         sh 'CILIUM_USE_ENVOY=1 PROVISION=1 ./contrib/vagrant/start.sh'
                      },
                     "K8s multi node Tests": {
                          //sh 'cd ./tests/k8s && vagrant destroy -f || true'
