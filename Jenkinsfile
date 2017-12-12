@@ -5,8 +5,8 @@ pipeline {
     options {
         timeout(time: 120, unit: 'MINUTES')
         timestamps()
+        disableConcurrentBuilds()
     }
-    options([disableConcurrentBuilds()])
     stages {
         stage ('Tests') {
             environment {
